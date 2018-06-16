@@ -52,7 +52,12 @@ Plug 'junegunn/vim-easy-align'
 
 " NERD tree will be loaded on the first invocation of NERDTreeToggle command
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-
+Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme'
 call plug#end()
+
+set term=xterm-256color
+syntax enable
+set background=dark
+colorscheme solarized
