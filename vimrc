@@ -1,6 +1,4 @@
 source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-behave mswin
 
 set encoding=utf-8
 set guifont=Source\ Code\ Pro\ 11
