@@ -97,3 +97,5 @@ bindkey -M viins 'jk' vi-cmd-mode
  alias zshconfig="vim ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Zsh grunt autocompletion
+eval "$(grunt --completion=zsh)"

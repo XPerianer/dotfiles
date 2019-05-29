@@ -53,9 +53,12 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme'
+Plug 'lervag/vimtex'
 call plug#end()
+" PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
 set term=xterm-256color
-syntax enable
 set background=dark
 colorscheme solarized
+set number relativenumber
+
