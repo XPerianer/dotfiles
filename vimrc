@@ -43,6 +43,12 @@ nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 nnoremap <F4> :NERDTreeToggle<CR>
 
+" Moving around with space
+nnoremap <space>j :m .+1<CR>==
+nnoremap <space>k :m .-2<CR>==
+vnoremap <space>j :m '>+1<CR>gv=gv
+vnoremap <space>k :m '<-2<CR>gv=gv
+
 " Plugin section
 call plug#begin('~/.vim/plugged')
 
