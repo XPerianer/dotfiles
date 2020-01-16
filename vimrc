@@ -5,6 +5,9 @@ set guifont=Source\ Code\ Pro\ 11
 
 set incsearch
 
+set ignorecase
+set smartcase
+
 set diffexpr=MyDiff()
 function MyDiff()
   let opt = '-a --binary '
@@ -60,6 +63,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme'
 Plug 'lervag/vimtex'
+Plug 'junegunn/fzf.vim'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
