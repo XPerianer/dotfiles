@@ -1,12 +1,15 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 source $VIMRUNTIME/vimrc_example.vim
 
 set encoding=utf-8
 set guifont=Source\ Code\ Pro\ 11
 
 set incsearch
-
-set ignorecase
-set smartcase
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -21,17 +24,7 @@ function MyDiff()
   if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
   if $VIMRUNTIME =~ ' '
     if &sh =~ '\<cmd'
-      if empty(&shellxquote)
-        let l:shxq_sav = ''
-        set shellxquote&
-      endif
-      let cmd = '"' . $VIMRUNTIME . '\diff"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
+     if empty(&shellxquote) let l:shxq_sav = '' set shellxquote& endif let cmd = '"' . $VIMRUNTIME . '\diff"' else let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"' endif else let cmd = $VIMRUNTIME . '\diff' endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
   if exists('l:shxq_sav')
     let &shellxquote=l:shxq_sav
@@ -52,6 +45,9 @@ nnoremap <space>k :m .-2<CR>==
 vnoremap <space>j :m '>+1<CR>gv=gv
 vnoremap <space>k :m '<-2<CR>gv=gv
 
+" Fuzzy file finding shortcut
+nnoremap <c-p> :FZF<cr>
+
 " Plugin section
 call plug#begin('~/.vim/plugged')
 
@@ -63,7 +59,10 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme'
 Plug 'lervag/vimtex'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-sensible'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
@@ -72,3 +71,12 @@ set background=dark
 colorscheme solarized
 set number relativenumber
 
+" Go to definition You Complete Me
+nnoremap <C-G> :YcmCompleter GoToDeclaration<CR>
+nnoremap <C-B> :YcmCompleter GoToDefinition<CR>
+
+set backupdir=~/.vim/tmp//,.
+set directory=~/.vim/tmp//,.
+
+set ignorecase
+set smartcase
