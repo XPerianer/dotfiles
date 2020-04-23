@@ -99,3 +99,5 @@ bindkey -M viins 'jk' vi-cmd-mode
 
 # Zsh grunt autocompletion
 eval "$(grunt --completion=zsh)"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

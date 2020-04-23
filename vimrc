@@ -4,8 +4,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-source $VIMRUNTIME/vimrc_example.vim
-
 set encoding=utf-8
 set guifont=Source\ Code\ Pro\ 11
 
@@ -63,10 +61,10 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-dispatch'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
-set term=xterm-256color
 set background=dark
 colorscheme solarized
 set number relativenumber
@@ -80,3 +78,5 @@ set directory=~/.vim/tmp//,.
 
 set ignorecase
 set smartcase
+
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
