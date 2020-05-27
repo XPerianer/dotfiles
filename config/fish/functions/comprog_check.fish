@@ -32,3 +32,15 @@ function comprog_check
 	end
 	set_color normal
 end
+
+function comprog_debug
+	if test 2 -ne (count $argv)
+		echo "Usage: name of executable test_set"
+	end
+
+	set executable $argv[1]
+	set test_number $argv[2]
+
+	g++ source/{$executable}.cpp -o source/{$executable} -g
+	and gdb source/{$executable} -ex "start \< ../samples{$exectuable}/{$test_number}.in" -ex "layout next"
+end
