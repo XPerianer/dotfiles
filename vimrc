@@ -62,6 +62,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-commentary'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
