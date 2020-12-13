@@ -63,6 +63,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
+Plug 'lambdalisue/suda.vim'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
