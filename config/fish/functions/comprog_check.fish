@@ -42,5 +42,5 @@ function comprog_debug
 	set test_number $argv[2]
 
 	g++ source/{$executable}.cpp -o source/{$executable} -g
-	and gdb source/{$executable} -ex "start \< ../samples{$exectuable}/{$test_number}.in" -ex "layout next"
+	and gdb source/{$executable} -ex start \< ../samples-"$executable"/"$test_number".in -ex "layout next"
 end
