@@ -55,7 +55,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
-Plug 'valloric/youcompleteme'
+Plug 'valloric/youcompleteme', { 'do': './install.py' }
 Plug 'lervag/vimtex'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -64,6 +64,10 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
 Plug 'lambdalisue/suda.vim'
+Plug 'dense-analysis/ale'
+Plug 'rbgrouleff/bclose.vim'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
 
@@ -75,6 +79,9 @@ set number relativenumber
 nnoremap <C-G> :YcmCompleter GoToDeclaration<CR>
 nnoremap <C-B> :YcmCompleter GoToDefinition<CR>
 
+" Close preview window automatically
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
 set backupdir=~/.vim/tmp//,.
 set directory=~/.vim/tmp//,.
 
@@ -82,3 +89,21 @@ set ignorecase
 set smartcase
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+
+" Always use the global python, to not install pynvim in every python virtual environment
+let g:python_host_prog = '/usr/local/bin/python'
+
+" Linting and Fixing
+let g:ale_fixers = {
+      \    'python': ['black'],
+      \   'html': ['tidy'],
+      \   'javascript': ['eslint'],
+      \}
+nmap <F10> :ALEFix<CR>
+
+let g:mapleader = " "
+let g:maplocalleader = ','
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+nnoremap H gT
+nnoremap L gt
