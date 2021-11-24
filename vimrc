@@ -53,7 +53,7 @@ Plug 'junegunn/vim-easy-align'
 
 " NERD tree will be loaded on the first invocation of NERDTreeToggle command
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme', { 'do': './install.py' }
 Plug 'lervag/vimtex'
@@ -70,9 +70,13 @@ Plug 'francoiscabrol/ranger.vim'
 Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " PlugInstall, PlugUpgrade, PlugUpdate to keep on track
+"
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 set background=dark
-colorscheme solarized
+colorscheme solarized8
 set number relativenumber
 
 " Go to definition You Complete Me
@@ -91,13 +95,14 @@ set smartcase
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " Always use the global python, to not install pynvim in every python virtual environment
-let g:python_host_prog = '/usr/local/bin/python'
+" let g:python_host_prog = '/usr/local/bin/python'
 
 " Linting and Fixing
 let g:ale_fixers = {
       \    'python': ['black'],
       \   'html': ['tidy'],
       \   'javascript': ['eslint'],
+      \   'css': ['fecs'],
       \}
 nmap <F10> :ALEFix<CR>
 
