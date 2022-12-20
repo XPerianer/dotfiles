@@ -5,9 +5,7 @@
 - clean: ['~']
 
 - link:
-            ~/.vimrc: vimrc
             ~/.zshrc: zshrc
-            ~/.vim: vim
             ~/.tmux.conf: tmux.conf
             ~/.ideavimrc: ideavimrc
             ~/.config:
