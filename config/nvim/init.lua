@@ -11,6 +11,17 @@ require('packer').startup(function(use)
   -- Package manager
   use 'wbthomason/packer.nvim'
 
+  -- Configure fidget to use legacy tag
+  use {
+    'j-hui/fidget.nvim',
+    tag = 'legacy',
+    config = function()
+      require("fidget").setup {
+        -- options
+      }
+    end,
+  }
+
   use { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     requires = {
@@ -47,7 +58,11 @@ require('packer').startup(function(use)
 
   use 'navarasu/onedark.nvim' -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
-  use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
+  use {
+    'lukas-reineke/indent-blankline.nvim', -- Add indentation guides even on blank lines
+    branch = 'legacy',
+    tag = 'v2.20.8'
+  }
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
   use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
 
@@ -56,6 +71,61 @@ require('packer').startup(function(use)
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
+
+  -- Black formatter
+  use { 'psf/black' }
+
+  -- Run tests
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "folke/neodev.nvim",
+      "nvim-neotest/neotest-python"
+    },
+    config = require("neotest").setup({
+      adapters = {
+        require("neotest-python")({
+          dap = { justMyCode = false },
+          runner = "pytest",
+          python = '/opt/homebrew/Caskroom/miniconda/base/envs/mt/bin/python'
+        }),
+      }
+    })
+  }
+  -- Run tests autocompletions
+  use { "folke/neodev.nvim",
+    config = require("neodev").setup({
+      library = { plugins = { "neotest" }, types = true },
+    })
+  }
+
+  use { "zbirenbaum/copilot.lua" }
+  require("copilot").setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+  })
+
+  use {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  }
+
+
+
+  -- File explorer
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -95,7 +165,8 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 -- Set highlight on search
 vim.o.hlsearch = false
 
--- Make line numbers default
+-- Set relative linenumbers
+vim.wo.relativenumber = true
 vim.wo.number = true
 
 -- Enable mouse mode
@@ -324,20 +395,32 @@ local on_attach = function(_, bufnr)
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    if vim.bo.filetype == "python" then
+      vim.cmd('Black')
+      return
+    end
     if vim.lsp.buf.format then
       vim.lsp.buf.format()
+      return
     elseif vim.lsp.buf.formatting then
       vim.lsp.buf.formatting()
+      return
     end
   end, { desc = 'Format current buffer with LSP' })
+
 end
+
+
+
+vim.keymap.set('n', '<leader>f', ":Format<CR>", { silent = true })
+vim.keymap.set('n', '<leader>ec', ":e ~/.config/nvim/init.lua<CR>")
 
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'gopls' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -365,7 +448,7 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
-require('lspconfig').sumneko_lua.setup {
+require('lspconfig').lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -393,6 +476,12 @@ require('lspconfig').sumneko_lua.setup {
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -405,17 +494,12 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
+      select = false,
+    },
+    ['<TAB>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -427,11 +511,29 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
+    { name = 'copilot' },
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
 }
 
+-- Keymaps for tests
+vim.keymap.set('n', '<leader>ta', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>ta', function() require('neotest').run.attach() end, { desc = "[T]est [A]ttach" })
+vim.keymap.set('n', '<leader>tf', function() require('neotest').run.run(vim.fn.expand('%')) end, { desc = "Run File" })
+vim.keymap.set('n', '<leader>tF', function() require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' }) end,
+  { desc = "Debug File" })
+vim.keymap.set('n', '<leader>tl', function() require('neotest').run.run_last() end, { desc = "Run Last" })
+vim.keymap.set('n', '<leader>tL', function() require('neotest').run.run_last({ strategy = 'dap' }) end,
+  { desc = "Debug Last" })
+vim.keymap.set('n', '<leader>tn', function() require('neotest').run.run() end, { desc = "Run Nearest" })
+vim.keymap.set('n', '<leader>tN', function() require('neotest').run.run({ strategy = 'dap' }) end,
+  { desc = "Debug Nearest" })
+vim.keymap.set('n', '<leader>to', function() require('neotest').output.open({ enter = true }) end, { desc = "Output" })
+vim.keymap.set('n', '<leader>tS', function() require('neotest').run.stop() end, { desc = "Stop" })
+vim.keymap.set('n', '<leader>ts', function() require('neotest').summary.toggle() end, { desc = "Summary" })
+-- nvim-tree setup
+require("nvim-tree").setup()
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
