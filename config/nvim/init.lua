@@ -14,12 +14,11 @@ require('packer').startup(function(use)
   -- Configure fidget to use legacy tag
   use {
     'j-hui/fidget.nvim',
-    tag = 'legacy',
-    config = function()
-      require("fidget").setup {
-        -- options
-      }
-    end,
+  }
+
+  -- Vimtex
+  use {
+    "lervag/vimtex",
   }
 
   use { -- LSP Configuration & Plugins
@@ -60,8 +59,6 @@ require('packer').startup(function(use)
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use {
     'lukas-reineke/indent-blankline.nvim', -- Add indentation guides even on blank lines
-    branch = 'legacy',
-    tag = 'v2.20.8'
   }
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
   use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
@@ -74,33 +71,6 @@ require('packer').startup(function(use)
 
   -- Black formatter
   use { 'psf/black' }
-
-  -- Run tests
-  use {
-    "nvim-neotest/neotest",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "antoinemadec/FixCursorHold.nvim",
-      "folke/neodev.nvim",
-      "nvim-neotest/neotest-python"
-    },
-    config = require("neotest").setup({
-      adapters = {
-        require("neotest-python")({
-          dap = { justMyCode = false },
-          runner = "pytest",
-          python = '/opt/homebrew/Caskroom/miniconda/base/envs/mt/bin/python'
-        }),
-      }
-    })
-  }
-  -- Run tests autocompletions
-  use { "folke/neodev.nvim",
-    config = require("neodev").setup({
-      library = { plugins = { "neotest" }, types = true },
-    })
-  }
 
   use { "zbirenbaum/copilot.lua" }
   require("copilot").setup({
@@ -124,7 +94,6 @@ require('packer').startup(function(use)
     requires = {
       'nvim-tree/nvim-web-devicons', -- optional, for file icons
     },
-    tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
@@ -233,12 +202,7 @@ require('lualine').setup {
 -- Enable Comment.nvim
 require('Comment').setup()
 
--- Enable `lukas-reineke/indent-blankline.nvim`
--- See `:help indent_blankline.txt`
-require('indent_blankline').setup {
-  char = '┊',
-  show_trailing_blankline_indent = false,
-}
+require('ibl').setup()
 
 -- Gitsigns
 -- See `:help gitsigns.txt`
@@ -289,7 +253,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help' },
+  ensure_installed = { 'c', 'cpp', 'lua', 'python', 'rust', 'typescript', 'vimdoc' },
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
@@ -420,7 +384,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'ts_ls', 'lua_ls', 'texlab' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
