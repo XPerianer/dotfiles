@@ -498,6 +498,9 @@ vim.keymap.set('n', '<leader>tS', function() require('neotest').run.stop() end, 
 vim.keymap.set('n', '<leader>ts', function() require('neotest').summary.toggle() end, { desc = "Summary" })
 -- nvim-tree setup
 require("nvim-tree").setup()
+-- Load nvim-tree and map F4 to toggle it
+vim.api.nvim_set_keymap('n', '<F4>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
