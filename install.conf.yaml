@@ -1,17 +1,17 @@
 - defaults:
-            link:
-                          relink: true
+    link:
+        relink: true
 
 - clean: ['~']
 
 - link:
-            ~/.zshrc: zshrc
-            ~/.tmux.conf: tmux.conf
-            ~/.ideavimrc: ideavimrc
-            ~/.config:
-                    glob: true
-                    path: config/*
-                    relink: true
+    ~/.zshrc: zshrc
+    ~/.tmux.conf: tmux.conf
+    ~/.ideavimrc: ideavimrc
+    ~/.config:
+        glob: true
+        path: config/*
+        relink: true
 
 - shell:
-          - [git submodule update --init --recursive, Installing submodules]
+    - [git submodule update --init --recursive, Installing submodules]
