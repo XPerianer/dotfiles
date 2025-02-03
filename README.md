@@ -30,9 +30,16 @@ git clone https://github.com/XPerianer/dotfiles && cd dotfiles && ./install
 
 ### Key Functions
 
+#### Fish shell
 | Shortcut | Description |
 |----------|-------------|
 | `Ctrl+P` | Convert natural language to shell command |
 | `Ctrl+Space` | Auto-complete current command |
 | `Ctrl+Space` | Get help with failed commands |
 
+#### Fish functions
+| Shortcut | Description |
+|----------|-------------|
+| `ec2ip` | Get the ip of an ec2 instance by name |
+| `ec2ssh` | ssh into an ec2 by name |
+| `ec2control` | Start and stop ec2 by name |
