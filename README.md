@@ -43,3 +43,7 @@ git clone https://github.com/XPerianer/dotfiles && cd dotfiles && ./install
 | `ec2ip` | Get the ip of an ec2 instance by name |
 | `ec2ssh` | ssh into an ec2 by name |
 | `ec2control` | Start and stop ec2 by name |
+
+
+## iTerm2 Configuration
+For better text editing, set the shortcuts according to [here](https://stackoverflow.com/a/37720002)
