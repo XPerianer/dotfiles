@@ -50,7 +50,7 @@ require('lazy').setup({
   'psf/black',
   'lervag/vimtex',
 
-  { 'j-hui/fidget.nvim', opts = {} },
+  { 'j-hui/fidget.nvim', opts = { notification = { window = { avoid = { 'NvimTree' } } } } },
   { 'numToStr/Comment.nvim', opts = {} },
 
   {
@@ -282,6 +282,12 @@ require('lazy').setup({
       vim.api.nvim_set_keymap('n', '<F4>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
     end,
   },
+}, {
+  rocks = { enabled = false },
 })
+
+-- Disable unused providers
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- vim: ts=2 sts=2 sw=2 et
