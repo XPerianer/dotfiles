@@ -8,6 +8,32 @@ git clone https://github.com/XPerianer/dotfiles && cd dotfiles && ./install
 # Powered by
 [Dotbot](https://github.com/anishathalye/dotbot)
 
+## Prerequisites
+
+### Fish shell
+Install fish before running `./install`:
+```bash
+brew install fish
+```
+
+Then register it as an allowed shell and set it as default:
+```bash
+echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
+```
+
+Reopen your terminal for the change to take effect.
+
+### Tmux powerline
+Install TPM (tmux plugin manager):
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
+Then open tmux and press `M-Space + I` (prefix + I) to install plugins.
+
+Requires Hack font (or any Powerline-compatible font) in your terminal.
+
 ## Additional Setup
 
 ### For [fish-ai](https://github.com/Realiserad/fish-ai):
