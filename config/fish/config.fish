@@ -14,3 +14,5 @@ function conda
     end
     echo "No conda installation found in $CONDA_PATH"
 end 
+
+zoxide init fish | source
