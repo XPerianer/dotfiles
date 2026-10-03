@@ -1,0 +1,19 @@
+[[session]]
+name = "main"
+path = "~/Library/Mobile Documents/com~apple~CloudDocs/obsidian_main/main"
+
+[[session]]
+name = "kgfm"
+path = "~/Documents/code/mimic_fmkg"
+
+[[session]]
+name = "oura"
+path = "~/Documents/code/hf_code/oura_cardiomems"
+
+[[session]]
+name = "paper-radar"
+path = "~/Documents/code/paper_radar"
+
+[[session]]
+name = "rhc"
+path = "~/Documents/code/hf_code/tabular_data"
